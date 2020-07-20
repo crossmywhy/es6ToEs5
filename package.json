@@ -1,0 +1,11 @@
+{
+  "name": "@test/es6ToEs5",
+  "version": "0.0.1",
+  "lockfileVersion": 1,
+  "bin": {
+    "t": "./bin/index.js"
+  },
+  "dependencies": {
+    "mkdirp": "^1.0.4"
+  }
+}
