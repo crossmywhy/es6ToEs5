@@ -14,7 +14,7 @@ const writeFile = (filename, data, options = {encoding: 'utf8'}) => {
 
 // 读文件
 const readFile = (filename) => {
-  fs.readFileSync(filename);
+  return fs.readFileSync(filename, 'utf8');
 };
 
 // 递归遍历目录

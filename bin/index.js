@@ -18,6 +18,8 @@ const targetDir = 'src';
 const transformDir = path.resolve(context, targetDir);
 const buildDir = 'build';
 const buildDirPath = path.resolve(context, 'build');
+const babelCore = require('@babel/core');
+
 // 获取目标目下下的所有映射关系
 const getAllFileList = () => {
   return new Promise((resolve, reject) => {
@@ -37,7 +39,34 @@ const pipe = () => {
         };
       })
       .forEach(({filename, oldFilePath, filePath, dir}) => {
+        let sourceCode = utils.readFile(oldFilePath);
         mkdirp.sync(dir.replace(targetDir, buildDir));
+        let {code} = babelCore.transform(sourceCode, {
+          presets: [
+            [
+              '@babel/preset-env',
+              {
+                targets: {
+                  chrome: '58',
+                  ie: '9',
+                },
+              },
+            ],
+          ],
+          plugins: [
+            [
+              '@babel/plugin-transform-runtime',
+              {
+                corejs: 3,
+              },
+            ],
+          ],
+        });
+
+        const buildFilePath = oldFilePath.replace('src', 'build');
+        utils.writeFile(buildFilePath, code);
+
+        // console.log(code);
         //TODO 读文件内容
         //src/a.js src/b.js 写入build/a.js b.js
         // 编译的操作， babel node如何接入babel，babel-transform,babel-core
